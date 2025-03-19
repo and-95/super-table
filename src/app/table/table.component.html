@@ -1,0 +1,34 @@
+<prizm-panel header="Сотрудники">
+  <div class="instruments" instruments>
+    <button class="instruments__icon" prizmIconButton size="m" appearance="secondary" icon="square-plus"></button>
+    <button class="instruments__icon" prizmIconButton size="m" appearance="secondary" icon="arrow-rotate-right"></button>
+    <button class="instruments__icon" prizmIconButton size="m" appearance="secondary" icon="trash"></button>
+    <prizm-input-layout size="m" [forceClear]="false" [outer]="true"><input [(ngModel)]="searchText" (input)="filterData()" prizmInput placeholder="Поиск..." /></prizm-input-layout>
+  </div>
+</prizm-panel>
+<prizm-scrollbar class="scrollable">
+  <table class="table" prizmTable size="m">
+    <thead prizmThead>
+      <tr prizmThGroup>
+        @for (column of columns(); track $index){
+        <th class="max-size" prizmTh>{{ column.label }}</th>
+        }
+      </tr>
+    </thead>
+    <tbody [data]="filteredData()" prizmTbody>
+      @for (row of filteredData(); track $index){
+      <tr prizmTr>
+        @for (column of columns(); track $index){
+        <td class="min-size" prizmTd>
+          @if (column.isDate){
+          {{ formatDate(row[column.key]) }}
+          } @else {
+          {{ row[column.key] }}
+          }
+        </td>
+        }
+      </tr>
+      }
+    </tbody>
+  </table>
+</prizm-scrollbar>

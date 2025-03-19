@@ -1,0 +1,32 @@
+// .max-size {
+// max-height: 10px;
+// }
+
+// .min-size {
+//   min-width: 190px;
+// }
+
+table{
+  width: 100%;
+}
+
+.instruments {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+
+  &__group {
+    min-height: 24px;
+
+    display: flex;
+    gap: 12px;
+    padding-left: 8px;
+
+    border-left: 1px solid var(--prizm-background-stroke);
+
+    &:first-child {
+      border: none;
+      padding-left: 0;
+    }
+  }
+}

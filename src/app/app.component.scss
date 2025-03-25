@@ -1,4 +1,14 @@
-.div{
+.content{
     margin: 20px ;
     border: 0.1em solid black;
+}
+.menu{
+    display: flex;
+    justify-content: center;
+    background-color: gray;
+
+    .menu_button{
+        padding: 10px;
+        background-color: gray;
+    }
 }

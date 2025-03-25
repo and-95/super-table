@@ -1,5 +1,12 @@
 
-
-<div class="div">
-<app-table [columns]="columns" [data]="data"></app-table>
+<div class="menu">
+    <prizm-listing-item [disabled]="false" [selected]="activeMenu === 'employees'" (click)="setEmployees()" class="menu_button"> Водители</prizm-listing-item>
+    <prizm-listing-item [disabled]="false" [selected]="activeMenu === 'autos'" (click)="setAutos()" class="menu_button"> Автомобили</prizm-listing-item>
+</div>
+<div class="content">
+    <app-table 
+    [columns]="columns()" 
+    [data]="data()" 
+    (dataChanged)="handleDataChanged($event)">
+  </app-table>
 </div>

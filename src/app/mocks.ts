@@ -1,10 +1,11 @@
 import { TableColumn, TableData } from "./table/interfaces/tableInterfaces";
 
 export const employeesConf: TableColumn[] = [
-    { key: 'name', label: 'Имя' },
-    { key: 'surname', label: 'Фамилия' },
-    { key: 'patronymic', label: 'Отчество' },
-    { key: 'berthday', label: 'Дата рождения', isDate: true },
+  { key: 'id', label: 'Номер записи' },
+    { key: 'name', label: 'Имя', required: true },
+    { key: 'surname', label: 'Фамилия', required: true  },
+    { key: 'patronymic', label: 'Отчество', required: true  },
+    { key: 'berthday', label: 'Дата рождения', isDate: true , required: true },
   ];
 
   export const employeesData: TableData[] = [
@@ -68,12 +69,13 @@ export const employeesConf: TableColumn[] = [
 
 
   export const autoConf: TableColumn[] = [
-    { key: 'auto_number', label: 'Номер автомобиля' },
-    { key: 'auto_mark', label: 'Марка автомобиля' },
+    { key: 'id', label: 'Номер записи' },
+    { key: 'auto_number', label: 'Номер автомобиля', required: true  },
+    { key: 'auto_mark', label: 'Марка автомобиля', required: true  },
     { key: 'auto_color', label: 'Цвет автомобиля' },
-    { key: 'auto_release', label: 'Дата производства автомобиля', isDate: true },
-    { key: 'auto_status', label: 'Статус автомобиля' },
-    { key: 'auto_bsmts', label: 'Наличие БСМТС' },
+    { key: 'auto_release', label: 'Дата производства автомобиля', isDate: true, required: true  },
+    { key: 'auto_status', label: 'Статус автомобиля', required: true  },
+    { key: 'auto_bsmts', label: 'Наличие БСМТС', required: true  },
   ];
 
 

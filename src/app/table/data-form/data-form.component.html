@@ -1,0 +1,35 @@
+<div class="form-container">
+    <h2>Добавить запись</h2>
+    
+    @for (column of columns; track column.key) {
+      @if (column.key !== 'id') {
+        <prizm-input-layout [label]="column.label">
+          @if (column.isDate) {
+            <input type="date" 
+                   [(ngModel)]="formData[column.key]" 
+                   prizmInput
+                   [attr.required]="column.required || null" />
+          }
+          @else {
+            <input [(ngModel)]="formData[column.key]" 
+                   prizmInput
+                   [attr.required]="column.required || null" />
+          }
+        </prizm-input-layout>
+      }
+    }
+    
+    <div class="buttons">
+      <button prizmButton 
+              type="button"
+              (click)="onCancel()">
+        Отмена
+      </button>
+      <button prizmButton 
+              type="submit"
+              (click)="onSubmit()"
+              [disabled]="!isFormValid()">
+        Добавить
+      </button>
+    </div>
+  </div>

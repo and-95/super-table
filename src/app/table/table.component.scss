@@ -30,3 +30,32 @@ table{
     }
   }
 }
+
+:host {
+  table {
+    width: 100%;
+  }
+
+  .scrollable {
+    max-height: 500px;
+  }
+
+  .checkbox-header {
+    width: 40px;
+  }
+
+  .checkbox {
+    height: 16px;
+    width: 16px;
+    margin: 0 auto;
+
+    display: flex;
+  }
+
+  .format {
+    &__number {
+      text-align: right;
+    }
+  }
+}
+

@@ -1,0 +1,18 @@
+.form-container {
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  
+    h2 {
+      margin-top: 0;
+      margin-bottom: 16px;
+    }
+  
+    .buttons {
+      display: flex;
+      justify-content: flex-end;
+      gap: 8px;
+      margin-top: 16px;
+    }
+  }

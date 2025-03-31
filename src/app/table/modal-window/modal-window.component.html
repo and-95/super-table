@@ -1,0 +1,61 @@
+<form [formGroup]="form" (ngSubmit)="onSubmit()">
+    <div class="form-group">
+      @if (typeModal() === 'drivers') {
+        <!-- Поля для водителей -->
+        <prizm-input-layout label="Имя" required class="input">
+          <input prizmInput formControlName="name" placeholder="Введите имя" class="input"/>
+        </prizm-input-layout>
+        
+        <prizm-input-layout label="Фамилия" required class="input">
+          <input prizmInput formControlName="surname" placeholder="Введите фамилию" />
+        </prizm-input-layout>
+        
+        <prizm-input-layout label="Отчество" required class="input">
+          <input prizmInput formControlName="patronymic" placeholder="Введите отчество" />
+        </prizm-input-layout>
+        
+        <prizm-input-layout label="Дата рождения" required class="input">
+          <input prizmInput type="date" formControlName="berthday" />
+        </prizm-input-layout>
+      } @else {
+        <!-- Поля для автомобилей -->
+        <prizm-input-layout label="Номер автомобиля" required class="input">
+          <input prizmInput formControlName="auto_number" placeholder="Введите номер" />
+        </prizm-input-layout>
+        
+        <prizm-input-layout label="Марка автомобиля" required class="input">
+          <input prizmInput formControlName="auto_mark" placeholder="Введите марку" />
+        </prizm-input-layout>
+        
+        <prizm-input-layout label="Цвет автомобиля" class="input">
+          <input prizmInput formControlName="auto_color" placeholder="Введите цвет" />
+        </prizm-input-layout>
+        
+        <prizm-input-layout label="Дата производства" required class="input">
+          <input prizmInput type="date" formControlName="auto_release" />
+        </prizm-input-layout>
+        
+        <prizm-input-layout label="Статус автомобиля" required class="input">
+          <input prizmInput formControlName="auto_status" placeholder="Введите статус" />
+        </prizm-input-layout>
+        
+        <prizm-checkbox formControlName="auto_bsmts" required>
+          Наличие БСМТС
+        </prizm-checkbox>
+      }
+  
+      @if (errorMessage) {
+        <div class="error-message">
+          {{ errorMessage }}
+        </div>
+      }
+  
+      <button prizmButton type="submit" [disabled]="form.invalid || isLoading">
+        @if (isLoading) {
+          <span>Отправка...</span>
+        } @else {
+          <span>{{ typeModal() === 'drivers' ? 'Добавить водителя' : 'Добавить автомобиль' }}</span>
+        }
+      </button>
+    </div>
+  </form>

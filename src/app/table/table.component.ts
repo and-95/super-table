@@ -1,4 +1,4 @@
-import { Component, inject, input, effect, signal, output } from '@angular/core';
+import { Component, inject, input, effect, signal, output, viewChild, TemplateRef, ChangeDetectionStrategy, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import {PrizmTableModule,
@@ -9,10 +9,9 @@ import {PrizmTableModule,
   PrizmDialogService} from '@prizm-ui/components';
 import { PrizmIconsFullRegistry } from '@prizm-ui/icons/core';
 import { prizmIconsUserCard,prizmIconsArrowRotateRight,prizmIconsSquarePlus,prizmIconsTrash } from '@prizm-ui/icons/full/source';
-import { TableColumn, TableData } from './interfaces/tableInterfaces';
-import { DataFormComponent } from './data-form/data-form.component';
-
-
+import { Driver, TableColumn, TableData, Autos } from './interfaces/tableInterfaces';
+import { take } from 'rxjs';
+import { ModalWindowComponent } from './modal-window/modal-window.component';
 
 
 
@@ -26,32 +25,28 @@ import { DataFormComponent } from './data-form/data-form.component';
     PrizmPanelComponent,
     PrizmButtonComponent,
     PrizmInputTextModule,
-    DataFormComponent,
+    ModalWindowComponent
     ],
   templateUrl: './table.component.html',
-  styleUrl: './table.component.scss'
+  styleUrl: './table.component.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 
 export class TableComponent {
   // Входные данные (только для чтения)
+  public tableTitle = input<string>('lfyyst');
   public data = input<TableData[]>([]);
+  public allData = signal<TableData[]>([]);
   public columns = input<TableColumn[]>([]);
-  public allData: TableData[] = [];
-  public allColumns: TableColumn[] = [];
   public filteredData = signal<TableData[]>([]); // Отфильтрованные данные (отображаются в таблице)
   public searchText: string = ''; // Переменная для хранения текста поиска
-  // Выходные события
-  public dataChanged = output<TableData[]>();
+  public currentMode = signal<'drivers' | 'autos'>('autos');
 
- 
   private readonly iconsFullRegistry = inject(PrizmIconsFullRegistry);
+  // protected readonly modalDialog = viewChild<TemplateRef<any>>('modalDialog'); //modal! <----
+  @ViewChild('modalDialog', { read: TemplateRef }) modalDialog!: TemplateRef<any>;
 
-  public singleSelectedItemCode: number | null = null;
-  public selectedItemsCodes: number[] = [];
-  public selectedMetaItemsCodes: number[] = [];
- 
   constructor(private readonly dialogService: PrizmDialogService) {
-    
     this.iconsFullRegistry.registerIcons(
       prizmIconsUserCard,
       prizmIconsArrowRotateRight,
@@ -61,51 +56,45 @@ export class TableComponent {
     effect(() => {
       // console.log('data-',this.allData);
       // console.log('data-',this.allColumns);
+      this.allData.set(this.data())
       this.filterData();
     });
+    effect(() => {
+      this.tableTitle();
+      console.log(this.tableTitle()) // просто читаем значение, чтобы эффект реагировал на изменения
+if (this.tableTitle() == 'Водители')
+{
+  this.currentMode.set('drivers')
+} else this.currentMode.set('autos')
+    });
+  
   }
 
-  openAddDialog() {
-    console.log('111',this.data());
-    const dialogRef = this.dialogService.open(DataFormComponent, {
+  public show(): void {
+    const dialogRef = this.dialogService.open(this.modalDialog, {
       closeable: true,
-      header: this.columns().some(c => c.key === 'name') ? 'Добавить водителя' : 'Добавить автомобиль',
-      width: '500px',
-      data: {
-        columns: this.columns().filter(c => c.key !== 'id')
-      }
-      
+      header: this.currentMode() === 'drivers' ? 'Добавить водителя' : 'Добавить транспорт',
+      width: 500,
+      position: 'c',
+      backdrop: true,
+      size: 'm',
+      data: { mode: this.currentMode() } // Передаем текущий режим
     });
-    dialogRef.subscribe(result => {
-      if (result) {
-        console.log('222',this.data());
-        const currentData = this.data();
-        const newId = currentData.length > 0 
-          ? Math.max(...currentData.map(item => item.id as number)) + 1 
-          : 1;
-        
-        // Создаем новый массив данных
-        const newData = [...currentData, { id: newId, ...result }];
-        
-        // 1. Уведомляем родительский компонент об изменении данных
-        this.dataChanged.emit(newData);
-        
-        // 2. Обновляем отфильтрованные данные
-        this.filteredData.set([...this.filteredData(), { id: newId, ...result }]);
-      }
-    });
+  
+    dialogRef.subscribe();
   }
+
 
 
   filterData(): any {
     if (!this.searchText) {
-       this.filteredData.set(this.data());
+       this.filteredData.set(this.allData());
       return;
     }
     // Приводим текст поиска к нижнему регистру для регистронезависимого поиска
     const searchTextLower = this.searchText.toLowerCase();
     // Фильтруем данные
-    this.filteredData.set(this.data().filter((row) => {
+    this.filteredData.set(this.allData().filter((row) => {
       // Проверяем каждое поле строки на совпадение
       return Object.values(row).some((value) => {
         // Если значение является датой, преобразуем его в строку

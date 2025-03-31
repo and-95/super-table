@@ -19,19 +19,20 @@ export class AppComponent {
 
   columns = signal(autoConf);
   data = signal(autoData);
+  tableTitle = 'Автомобили';
 
   setEmployees() {
     this.columns.set(employeesConf);
     this.data.set(employeesData);
+    this.activeMenu = 'employees';
+    this.tableTitle = 'Водители';
   }
 
   setAutos() {
     this.columns.set(autoConf);
     this.data.set(autoData);
-  }
-
-  handleDataChanged(newData: TableData[]) {
-    this.data.set(newData);
+    this.activeMenu = 'autos';
+    this.tableTitle = 'Автомобили';
   }
 
   activeMenu: 'employees' | 'autos' = 'autos';

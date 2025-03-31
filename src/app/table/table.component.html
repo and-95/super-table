@@ -1,11 +1,12 @@
-<prizm-panel header="Сотрудники">
+<prizm-panel >
   <div class="instruments" instruments>
     <button class="instruments__icon" 
     prizmIconButton 
     size="m" 
     appearance="secondary" 
     icon="square-plus"
-    (click)="openAddDialog()"></button>
+    (click)="show()"
+  ></button>
     <button class="instruments__icon" prizmIconButton size="m" appearance="secondary" icon="arrow-rotate-right"></button>
     <button class="instruments__icon" prizmIconButton size="m" appearance="secondary" icon="trash"></button>
     <prizm-input-layout size="m" [forceClear]="false" [outer]="true"><input [(ngModel)]="searchText" (input)="filterData()" prizmInput placeholder="Поиск..." /></prizm-input-layout>
@@ -37,3 +38,7 @@
     </tbody>
   </table>
 </prizm-scrollbar>
+
+<ng-template #modalDialog>
+<app-modal-window [typeModal]="currentMode()"/>
+</ng-template>
